@@ -322,3 +322,344 @@ WHERE id = 104;
 * Select
 * Update
 * Delete
+
+# 📘 PostgreSQL Notes – Part 2 (Simple English)
+
+## 1. DELETE Operation (CRUD)
+
+To delete a record from table:
+
+DELETE FROM person
+WHERE id = 104;
+
+Select the query → Execute
+
+After delete, check:
+
+SELECT * FROM person;
+
+Result: Alex record removed
+
+Only 3 persons left
+
+✅ Now all CRUD operations completed:
+
+Create
+
+Read
+
+Update
+
+Delete
+
+---
+
+## 2. Problems in Our Old Table Structure
+
+### Problem 1 – Duplicate ID
+
+Example:
+
+INSERT INTO person VALUES (101, 'Alex', 'Pune');
+
+Raju already has ID = 101
+
+Still database accepted duplicate
+❌ This should NOT happen.
+
+### Problem 2 – NULL Values
+
+INSERT INTO person (id, name)
+VALUES (105, 'Vikta');
+
+City not provided
+
+Result:
+
+id    name    city
+105   Vikta   NULL
+
+❌ City became NULL
+We need rules to avoid this.
+
+---
+
+## 3. Data Types
+
+Data type defines what kind of data a column will store.
+
+### Common Data Types
+
+Numeric
+
+INT → whole numbers
+
+DECIMAL → numbers with points
+
+String
+
+VARCHAR(100)
+
+Date
+
+For DOB, joining date
+
+Boolean
+
+TRUE / FALSE
+
+### Numeric Types Example
+
+INT → normal numbers
+
+BIGINT → very large numbers
+
+DECIMAL(5,2)
+
+Example:
+
+155.50 → valid for DECIMAL(5,2)
+1501.22 → NOT valid (too big)
+
+---
+
+## 4. Constraints
+
+Constraint = Rule on column
+
+Used to:
+
+Stop duplicates
+
+Stop NULL
+
+Set default values
+
+### Types:
+
+Primary Key
+
+NOT NULL
+
+UNIQUE
+
+DEFAULT
+
+SERIAL (Auto Increment)
+
+### Primary Key
+
+Unique for each row
+
+No duplicate
+
+No NULL
+
+Only ONE per table
+
+Example:
+
+id INT PRIMARY KEY
+
+NOT NULL
+name VARCHAR(50) NOT NULL
+
+### DEFAULT Value
+
+account_type VARCHAR(50)
+NOT NULL DEFAULT 'Savings';
+
+If no value given → ‘Savings’ stored
+
+### Auto Increment (SERIAL)
+
+PostgreSQL uses SERIAL
+
+id SERIAL PRIMARY KEY
+
+Automatically:
+1, 2, 3, 4…
+
+---
+
+## 5. TASK – Create Bank Database
+
+### Create Database
+
+CREATE DATABASE bank_db;
+
+### Create Employee Table
+
+CREATE TABLE employee (
+emp_id SERIAL PRIMARY KEY,
+
+```
+f_name VARCHAR(100) NOT NULL,
+
+l_name VARCHAR(100) NOT NULL,
+
+email VARCHAR(100) NOT NULL UNIQUE,
+
+department VARCHAR(50),
+
+salary DECIMAL(10,2) DEFAULT 30000.00,
+
+hire_date DATE NOT NULL DEFAULT CURRENT_DATE
+```
+
+);
+
+### Verify Table
+
+\d employee
+
+You will see:
+
+NOT NULL
+
+DEFAULT values
+
+PRIMARY KEY
+
+Index created automatically
+
+---
+
+## 6. Insert Employee Data
+
+### Normal Insert
+
+INSERT INTO employee
+(emp_id, f_name, l_name, email, department, salary, hire_date)
+VALUES
+(1, 'Raj', 'Sharma', '[raj@gmail.com](mailto:raj@gmail.com)', 'IT', 45000, '2024-03-10');
+
+### Using Defaults
+
+INSERT INTO employee
+(f_name, l_name, email, department)
+VALUES
+('Priya', 'Singh', '[priya@gmail.com](mailto:priya@gmail.com)', 'HR');
+
+✔ What happens automatically:
+
+emp_id → 2 (SERIAL)
+
+salary → 30000
+
+hire_date → today’s date
+
+---
+
+## 7. SERIAL Problem Explained
+
+If we insert first record manually with id = 1
+Then next insert without id → system again tries 1 → error!
+
+### Solution:
+
+SELECT setval('employee_emp_id_seq', 1);
+
+Now next value will be 2.
+
+---
+
+## 8. UNIQUE Constraint Test
+
+Try duplicate email:
+
+INSERT INTO employee
+(f_name, l_name, email, department)
+VALUES
+('Sachin', 'Verma', '[priya@gmail.com](mailto:priya@gmail.com)', 'IT');
+
+❌ Error:
+
+duplicate value violates unique constraint
+
+✔ UNIQUE working correctly
+
+---
+
+## 9. Insert Multiple Records
+
+Teacher provided ready query with 10 employees
+(Use that to fill table for next topics)
+
+Check:
+
+SELECT * FROM employee;
+
+---
+
+## 10. SQL Clauses (Start of Section 4)
+
+Clause = condition used with SQL query
+
+We will learn:
+
+WHERE
+
+DISTINCT
+
+ORDER BY
+
+LIMIT
+
+LIKE
+
+### WHERE Clause
+
+Used to fetch specific data
+
+Example:
+
+SELECT * FROM employee
+WHERE emp_id = 5;
+
+Fetch only one employee
+
+Based on primary key
+
+---
+
+## ✅ Summary of This Part
+
+### Problems Solved
+
+Duplicate ID
+
+NULL values
+
+Default values
+
+Auto increment
+
+### New Concepts Learned
+
+Data Types
+
+Constraints
+
+PRIMARY KEY
+
+NOT NULL
+
+UNIQUE
+
+DEFAULT
+
+SERIAL
+
+### Practical Work
+
+Created bank_db
+
+Created employee table
+
+Tested constraints
+
+Inserted data
+
+Verified behavior
+
