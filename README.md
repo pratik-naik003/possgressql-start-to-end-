@@ -383,102 +383,238 @@ id    name    city
 We need rules to avoid this.
 
 ---
+# 🐘 PostgreSQL Data Types – Simple Notes (Beginner Friendly)
 
-## 3. Data Types
+## 📌 What are Data Types in PostgreSQL?
 
-Data type defines what kind of data a column will store.
-
-### Common Data Types
-
-Numeric
-
-INT → whole numbers
-
-DECIMAL → numbers with points
-
-String
-
-VARCHAR(100)
-
-Date
-
-For DOB, joining date
-
-Boolean
-
-TRUE / FALSE
-
-### Numeric Types Example
-
-INT → normal numbers
-
-BIGINT → very large numbers
-
-DECIMAL(5,2)
+Data types define what kind of data a column can store in a table.
 
 Example:
 
-155.50 → valid for DECIMAL(5,2)
-1501.22 → NOT valid (too big)
+* Name → Text
+* Age → Number
+* Date of Birth → Date
+
+Example SQL:
+
+```sql
+CREATE TABLE student (
+    name TEXT,
+    age INT,
+    dob DATE
+);
+```
 
 ---
 
-## 4. Constraints
+# 📚 Main Categories of PostgreSQL Data Types
 
-Constraint = Rule on column
+## 1️⃣ Numeric Data Types (Numbers)
 
-Used to:
+Used to store numbers like integers and decimals.
 
-Stop duplicates
+### 🔹 Common Numeric Types
 
-Stop NULL
+| Data Type         | Description                     | Example   |
+| ----------------- | ------------------------------- | --------- |
+| SMALLINT          | Small integer (-32768 to 32767) | 25        |
+| INTEGER (INT)     | Normal integer                  | 100       |
+| BIGINT            | Large integer                   | 999999999 |
+| DECIMAL / NUMERIC | Exact decimal numbers           | 10.55     |
+| REAL              | Floating point (approximate)    | 3.14      |
+| DOUBLE PRECISION  | High precision float            | 123.456   |
 
-Set default values
+### Example:
 
-### Types:
+```sql
+CREATE TABLE product (
+    price NUMERIC(10,2),
+    quantity INT
+);
+```
 
-Primary Key
+---
 
-NOT NULL
+## 2️⃣ Character/String Data Types (Text)
 
-UNIQUE
+Used to store text, names, and sentences.
 
-DEFAULT
+### 🔹 Common String Types
 
-SERIAL (Auto Increment)
+| Data Type  | Description                | Example           |
+| ---------- | -------------------------- | ----------------- |
+| CHAR(n)    | Fixed length string        | CHAR(5) = "Hello" |
+| VARCHAR(n) | Variable length with limit | VARCHAR(50)       |
+| TEXT       | Unlimited length text      | Long paragraph    |
 
-### Primary Key
+### Example:
 
-Unique for each row
+```sql
+CREATE TABLE users (
+    name VARCHAR(50),
+    email TEXT
+);
+```
 
-No duplicate
+💡 Tip: Most developers prefer TEXT or VARCHAR in real projects.
 
-No NULL
+---
 
-Only ONE per table
+## 3️⃣ Boolean Data Type (True/False)
 
-Example:
+Stores only TRUE, FALSE, or NULL values.
 
-id INT PRIMARY KEY
+### Example:
 
-NOT NULL
-name VARCHAR(50) NOT NULL
+```sql
+CREATE TABLE tasks (
+    is_completed BOOLEAN
+);
+```
 
-### DEFAULT Value
+Possible values:
 
-account_type VARCHAR(50)
-NOT NULL DEFAULT 'Savings';
+* TRUE
+* FALSE
+* NULL
 
-If no value given → ‘Savings’ stored
+---
 
-### Auto Increment (SERIAL)
+## 4️⃣ Date and Time Data Types ⏰
 
-PostgreSQL uses SERIAL
+Used to store date and time information.
 
-id SERIAL PRIMARY KEY
+| Data Type   | Description             | Example                   |
+| ----------- | ----------------------- | ------------------------- |
+| DATE        | Only date               | 2025-02-12                |
+| TIME        | Only time               | 14:30:00                  |
+| TIMESTAMP   | Date + Time             | 2025-02-12 14:30:00       |
+| TIMESTAMPTZ | Timestamp with timezone | 2025-02-12 14:30:00+05:30 |
 
-Automatically:
-1, 2, 3, 4…
+### Example:
+
+```sql
+CREATE TABLE events (
+    event_date DATE,
+    created_at TIMESTAMP
+);
+```
+
+---
+
+## 5️⃣ UUID Data Type (Unique Identifier)
+
+Used for globally unique IDs (very useful in scalable applications).
+
+### Example:
+
+```sql
+CREATE TABLE users (
+    id UUID PRIMARY KEY
+);
+```
+
+Example UUID:
+
+```
+550e8400-e29b-41d4-a716-446655440000
+```
+
+---
+
+## 6️⃣ JSON and JSONB Data Types 🚀
+
+PostgreSQL supports storing JSON data.
+
+| Type  | Description                                             |
+| ----- | ------------------------------------------------------- |
+| JSON  | Stores JSON data as text                                |
+| JSONB | Binary JSON (faster, searchable, better for production) |
+
+### Example:
+
+```sql
+CREATE TABLE logs (
+    data JSONB
+);
+```
+
+Insert JSON:
+
+```sql
+INSERT INTO logs (data)
+VALUES ('{"name": "Pratik", "age": 20}');
+```
+
+---
+
+## 7️⃣ Array Data Type
+
+PostgreSQL allows storing arrays in columns.
+
+### Example:
+
+```sql
+CREATE TABLE students (
+    marks INT[]
+);
+```
+
+Insert Array:
+
+```sql
+INSERT INTO students (marks)
+VALUES (ARRAY[85, 90, 95]);
+```
+
+---
+
+## 8️⃣ Serial (Auto Increment)
+
+Used for automatic ID generation.
+
+| Type      | Description                  |
+| --------- | ---------------------------- |
+| SERIAL    | Auto increment integer       |
+| BIGSERIAL | Large auto increment integer |
+
+### Example:
+
+```sql
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name TEXT
+);
+```
+
+---
+
+# 🧠 Best Data Types for Real Projects (Recommended)
+
+| Use Case         | Recommended Data Type |
+| ---------------- | --------------------- |
+| ID               | SERIAL or UUID        |
+| Name             | VARCHAR or TEXT       |
+| Email            | TEXT                  |
+| Price            | NUMERIC               |
+| Created Date     | TIMESTAMP             |
+| Status/Flags     | BOOLEAN               |
+| API/Complex Data | JSONB                 |
+
+---
+
+# 🔥 Important Interview Tip
+
+Most commonly used PostgreSQL data types in real-world projects:
+
+* INTEGER
+* VARCHAR / TEXT
+* BOOLEAN
+* TIMESTAMP
+* JSONB
+* UUID
+
+These are heavily used in MERN, Full Stack, and AI/ML backend projects.
 
 ---
 
